@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,18 +28,25 @@ public class AccountController {
     final RegisterAccountInput registerAccountInput;
     final RegisterAccountRequestMapper requestMapper;
 
-    private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
+    private static final Logger logger
+            = LoggerFactory.getLogger(AccountController.class);
 
-    @PostMapping("/register")
+    @PostMapping(
+            path = "/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     @WithCorsProtection
     public ResponseEntity<Object> register(
             @RequestBody RegisterAccountRequest request
     ) throws NoSuchAlgorithmException, URISyntaxException {
         logger.info("POST: /register called");
-        AccountCreationStatus test = registerAccountInput.with(
-                requestMapper.mapToAccountEntity(request)
+        AccountCreationStatus status = registerAccountInput.with(
+                requestMapper.mapToAccountEntity(
+                        request
+                )
         );
-        if (test.equals(AccountCreationStatus.SUCCESS)){
+        if (status.equals(AccountCreationStatus.SUCCESS)){
             return ResponseEntity.created(
                     new URI("https://henhaochi.io")
             ).build();

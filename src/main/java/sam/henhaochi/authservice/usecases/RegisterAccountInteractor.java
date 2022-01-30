@@ -11,14 +11,15 @@ import java.security.NoSuchAlgorithmException;
 
 @Service
 @AllArgsConstructor
-public class RegisterAccountInteractor implements RegisterAccountInput {
+public class RegisterAccountInteractor
+        implements RegisterAccountInput {
 
     final AccountDataSource accountDataSource;
 
     @Override
-    public AccountCreationStatus with(Account account)
-            throws NoSuchAlgorithmException
-    {
+    public AccountCreationStatus with(
+            Account account
+    ) throws NoSuchAlgorithmException {
         account.encrypt();
         return accountDataSource.registerWith(account);
     }

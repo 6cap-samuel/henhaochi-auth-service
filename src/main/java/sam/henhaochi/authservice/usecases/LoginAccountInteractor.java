@@ -10,7 +10,8 @@ import java.security.NoSuchAlgorithmException;
 
 @Service
 @AllArgsConstructor
-public class LoginAccountInteractor implements LoginAccountInput {
+public class LoginAccountInteractor
+        implements LoginAccountInput {
 
     final AccountDataSource accountDataSource;
 

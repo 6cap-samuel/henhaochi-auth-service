@@ -11,7 +11,8 @@ import javax.annotation.Nullable;
 
 @Repository
 @AllArgsConstructor
-public class AccountRepositoryAdapter implements AccountDataSource {
+public class AccountRepositoryAdapter
+        implements AccountDataSource {
 
     final AccountRepository accountRepository;
     final AccountEntityMapper entityMapper;
@@ -36,7 +37,9 @@ public class AccountRepositoryAdapter implements AccountDataSource {
 
     @Nullable
     @Override
-    public Account loginWith(Account account) {
+    public Account loginWith(
+            Account account
+    ) {
         return accountRepository.login(
                 account.getEmail(),
                 account.getPassword(),
