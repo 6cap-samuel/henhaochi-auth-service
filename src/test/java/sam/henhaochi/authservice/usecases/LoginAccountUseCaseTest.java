@@ -12,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
-class LoginAccountInteractorTest {
+class LoginAccountUseCaseTest {
 
     private static String USERNAME = "johndoe";
     private static String EMAIL = "johndoe@gmail.com";
     private static String PASSWORD = "johndoeisnice";
     private static String TOKEN = "mocktoken";
 
-    LoginAccountInteractor loginAccountInteractor;
+    LoginAccountUseCase loginAccountUseCase;
     AccountDataSource accountDataSource;
     TokenDataSource tokenDataSource;
 
@@ -27,8 +27,8 @@ class LoginAccountInteractorTest {
     void before() {
         accountDataSource = mock(AccountDataSource.class);
         tokenDataSource = mock(TokenDataSource.class);
-        loginAccountInteractor =
-                 new LoginAccountInteractor(
+        loginAccountUseCase =
+                 new LoginAccountUseCase(
                          accountDataSource,
                          tokenDataSource
                  );
@@ -48,7 +48,7 @@ class LoginAccountInteractorTest {
         when(tokenDataSource.generateToken(account))
                 .thenReturn(TOKEN);
 
-        Account result = loginAccountInteractor.with(
+        Account result = loginAccountUseCase.with(
                 account
         );
 
@@ -74,7 +74,7 @@ class LoginAccountInteractorTest {
         when(accountDataSource.loginWith(account))
                 .thenReturn(null);
 
-        Account result = loginAccountInteractor.with(
+        Account result = loginAccountUseCase.with(
                 account
         );
 

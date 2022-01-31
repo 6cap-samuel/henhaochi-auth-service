@@ -9,6 +9,7 @@ import sam.henhaochi.authservice.repositories.mappers.AccountEntityMapper;
 import sam.henhaochi.authservice.usecases.out.TokenDataSource;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 
 @Repository
 @AllArgsConstructor
@@ -31,5 +32,15 @@ public class TokenRepositoryAdapter
         tokenRepository.save(tokenEntity);
 
         return tokenEntity.getTokenString();
+    }
+
+    @Override
+    public boolean isTokenValid(String token) {
+        return tokenRepository.existsByTokenStringEqualsAndExpirationDateIsGreaterThan(
+                token,
+                new Timestamp(
+                        System.currentTimeMillis()
+                )
+        );
     }
 }
