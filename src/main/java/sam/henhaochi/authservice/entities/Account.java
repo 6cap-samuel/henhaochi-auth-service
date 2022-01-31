@@ -14,11 +14,20 @@ import java.security.NoSuchAlgorithmException;
 @Setter
 public class Account {
 
+    private Long id;
     private String username;
     private String email;
     private String password;
+    private String token;
 
-    public void encrypt() throws NoSuchAlgorithmException {
+    public void encrypt()
+            throws NoSuchAlgorithmException {
         password = HashGenerator.generateHash(password);
+    }
+
+    public void tokenize(
+            String token
+    ) {
+        this.token = token;
     }
 }
