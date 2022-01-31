@@ -11,11 +11,13 @@ import sam.henhaochi.authservice.controllers.mappers.LoginAccountResponseMapper;
 import sam.henhaochi.authservice.controllers.requests.LoginRequest;
 import sam.henhaochi.authservice.controllers.responses.LoginResponse;
 import sam.henhaochi.authservice.entities.Account;
+import sam.henhaochi.authservice.usecases.in.CheckTokenInput;
 import sam.henhaochi.authservice.usecases.in.LoginAccountInput;
 import sam.henhaochi.authservice.utilities.Json;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -38,6 +40,9 @@ class AuthControllerTest {
 
     @MockBean
     LoginAccountResponseMapper loginAccountResponseMapper;
+
+    @MockBean
+    CheckTokenInput checkTokenInput;
 
     @Test
     public void shouldReturnProfileWhenAccountIsValid()
@@ -89,7 +94,7 @@ class AuthControllerTest {
     }
 
     @Test
-    public void shouldReturnForbiddeneWhenAccountIsInvalid()
+    public void shouldReturnForbiddenWhenAccountIsInvalid()
             throws Exception {
         Account mappedAccount = Account.builder()
                 .username(USERNAME)
@@ -125,4 +130,27 @@ class AuthControllerTest {
         );
     }
 
+    @Test
+    public void shouldReturnNoContentWhenTokenIsValid() throws Exception {
+        when(checkTokenInput.check(TOKEN)).thenReturn(true);
+
+        mockMvc.perform(get("/auth/token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("token", TOKEN)
+        ).andExpect(status()
+                .isNoContent()
+        );
+    }
+
+    @Test
+    public void shouldReturnForbiddenWhenTokenIsInvalid() throws Exception {
+        when(checkTokenInput.check(TOKEN)).thenReturn(false);
+
+        mockMvc.perform(get("/auth/token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("token", TOKEN)
+        ).andExpect(status()
+                .isForbidden()
+        );
+    }
 }

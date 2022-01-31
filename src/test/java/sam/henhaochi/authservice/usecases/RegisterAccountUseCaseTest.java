@@ -12,20 +12,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class RegisterAccountInteractorTest {
+class RegisterAccountUseCaseTest {
 
     private static String USERNAME = "johndoe";
     private static String EMAIL = "johndoe@gmail.com";
     private static String PASSWORD = "johndoeisnice";
 
-    RegisterAccountInteractor registerAccountInteractor;
+    RegisterAccountUseCase registerAccountUseCase;
     AccountDataSource accountDataSource;
 
     @BeforeEach
     void before() {
         accountDataSource = mock(AccountDataSource.class);
-        registerAccountInteractor =
-                new RegisterAccountInteractor(
+        registerAccountUseCase =
+                new RegisterAccountUseCase(
                         accountDataSource
                 );
     }
@@ -43,7 +43,7 @@ class RegisterAccountInteractorTest {
 
         assertEquals(
                 AccountCreationStatus.SUCCESS,
-                registerAccountInteractor.with(
+                registerAccountUseCase.with(
                         account
                 )
         );

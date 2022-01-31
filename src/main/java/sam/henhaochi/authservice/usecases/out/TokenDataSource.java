@@ -8,4 +8,8 @@ public interface TokenDataSource {
     String generateToken(
             Account account
     ) throws NoSuchAlgorithmException;
+
+    boolean isTokenValid(
+            String token
+    );
 }

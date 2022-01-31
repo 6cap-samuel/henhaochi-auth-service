@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Service
 @AllArgsConstructor
-public class RegisterAccountInteractor
+public class RegisterAccountUseCase
         implements RegisterAccountInput {
 
     final AccountDataSource accountDataSource;

@@ -12,6 +12,7 @@ import sam.henhaochi.authservice.controllers.mappers.LoginAccountRequestMapper;
 import sam.henhaochi.authservice.controllers.mappers.LoginAccountResponseMapper;
 import sam.henhaochi.authservice.controllers.requests.LoginRequest;
 import sam.henhaochi.authservice.entities.Account;
+import sam.henhaochi.authservice.usecases.in.CheckTokenInput;
 import sam.henhaochi.authservice.usecases.in.LoginAccountInput;
 
 import java.security.NoSuchAlgorithmException;
@@ -24,6 +25,7 @@ public class AuthController {
     final LoginAccountInput loginAccountInput;
     final LoginAccountRequestMapper loginAccountRequestMapper;
     final LoginAccountResponseMapper loginAccountResponseMapper;
+    final CheckTokenInput checkTokenInput;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AuthController.class);
@@ -52,6 +54,23 @@ public class AuthController {
                     .body(loginAccountResponseMapper.map(
                             foundAccount)
                     );
+        }
+    }
+
+    @GetMapping("/token")
+    @WithCorsProtection
+    public ResponseEntity<Object> checktokenValidity(
+            @RequestHeader("token") String token
+    ) {
+        logger.info("POST: /token called");
+        if (checkTokenInput.check(token)){
+            return ResponseEntity.status(
+                    HttpStatus.NO_CONTENT
+            ).build();
+        } else {
+            return ResponseEntity.status(
+                    HttpStatus.FORBIDDEN
+            ).build();
         }
     }
 }

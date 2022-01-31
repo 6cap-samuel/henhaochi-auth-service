@@ -10,8 +10,10 @@ import sam.henhaochi.authservice.repositories.entities.TokenEntity;
 import sam.henhaochi.authservice.repositories.mappers.AccountEntityMapper;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TokenRepositoryAdapterTest {
@@ -72,5 +74,18 @@ class TokenRepositoryAdapterTest {
                     times(1)
             ).save(token);
         }
+    }
+
+
+    @Test
+    public void shouldGetToken() {
+        when(tokenRepository.existsByTokenStringEqualsAndExpirationDateIsGreaterThan(
+                eq(TOKEN),
+                any()
+        )).thenReturn(true);
+
+        assertTrue(
+                tokenRepositoryAdapter.isTokenValid(TOKEN)
+        );
     }
 }
