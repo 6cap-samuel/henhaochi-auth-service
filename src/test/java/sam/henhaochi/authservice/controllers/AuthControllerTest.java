@@ -7,7 +7,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import sam.henhaochi.authservice.controllers.mappers.LoginAccountRequestMapper;
+import sam.henhaochi.authservice.controllers.mappers.LoginAccountResponseMapper;
 import sam.henhaochi.authservice.controllers.requests.LoginRequest;
+import sam.henhaochi.authservice.controllers.responses.LoginResponse;
 import sam.henhaochi.authservice.entities.Account;
 import sam.henhaochi.authservice.usecases.in.LoginAccountInput;
 import sam.henhaochi.authservice.utilities.Json;
@@ -23,6 +25,7 @@ class AuthControllerTest {
     private static String USERNAME = "johndoe";
     private static String EMAIL = "johndoe@gmail.com";
     private static String PASSWORD = "johndoeisnice";
+    private static String TOKEN = "mocktoken";
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,6 +35,9 @@ class AuthControllerTest {
 
     @MockBean
     LoginAccountRequestMapper loginAccountRequestMapper;
+
+    @MockBean
+    LoginAccountResponseMapper loginAccountResponseMapper;
 
     @Test
     public void shouldReturnProfileWhenAccountIsValid()
@@ -56,6 +62,14 @@ class AuthControllerTest {
                 .password(PASSWORD)
                 .email(EMAIL)
                 .build();
+        LoginResponse response = LoginResponse
+                .builder()
+                .token(TOKEN)
+                .build();
+
+        when(loginAccountResponseMapper.map(
+                mappedAccount)
+        ).thenReturn(response);
 
         mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -67,6 +81,10 @@ class AuthControllerTest {
                 .contentType(
                         MediaType.APPLICATION_JSON
                 )
+        ).andExpect(jsonPath("$.token")
+                .exists()
+        ).andExpect(jsonPath("$.token")
+                .value(TOKEN)
         );
     }
 
