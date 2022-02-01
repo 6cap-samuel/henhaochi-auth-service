@@ -1,16 +1,16 @@
 package sam.henhaochi.authservice.repositories;
 
-import com.google.common.base.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import sam.henhaochi.authservice.repositories.entities.TokenEntity;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Repository
 public interface TokenRepository
         extends CrudRepository<TokenEntity, String> {
-    boolean existsByTokenStringEqualsAndExpirationDateIsGreaterThan(
+    Optional<TokenEntity> findByTokenStringEqualsAndExpirationDateIsGreaterThan(
             String tokenString,
             Timestamp expirationDate
     );

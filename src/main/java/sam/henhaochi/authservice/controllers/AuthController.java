@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import sam.henhaochi.authservice.annotations.methods.WithCorsProtection;
 import sam.henhaochi.authservice.controllers.mappers.LoginAccountRequestMapper;
 import sam.henhaochi.authservice.controllers.mappers.LoginAccountResponseMapper;
+import sam.henhaochi.authservice.controllers.mappers.TokenResponseMapper;
 import sam.henhaochi.authservice.controllers.requests.LoginRequest;
+import sam.henhaochi.authservice.controllers.responses.TokenResponse;
 import sam.henhaochi.authservice.entities.Account;
 import sam.henhaochi.authservice.usecases.in.CheckTokenInput;
 import sam.henhaochi.authservice.usecases.in.LoginAccountInput;
@@ -25,6 +27,7 @@ public class AuthController {
     final LoginAccountInput loginAccountInput;
     final LoginAccountRequestMapper loginAccountRequestMapper;
     final LoginAccountResponseMapper loginAccountResponseMapper;
+    final TokenResponseMapper tokenResponseMapper;
     final CheckTokenInput checkTokenInput;
 
     private static final Logger logger
@@ -63,10 +66,16 @@ public class AuthController {
             @RequestHeader("token") String token
     ) {
         logger.info("POST: /token called");
-        if (checkTokenInput.check(token)){
+
+        Account account = checkTokenInput.check(token);
+        if (account != null){
             return ResponseEntity.status(
-                    HttpStatus.NO_CONTENT
-            ).build();
+                    HttpStatus.OK
+            ).contentType(
+                    MediaType.APPLICATION_JSON
+            ).body(tokenResponseMapper
+                    .map(account)
+            );
         } else {
             return ResponseEntity.status(
                     HttpStatus.FORBIDDEN

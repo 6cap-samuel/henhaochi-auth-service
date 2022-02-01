@@ -9,7 +9,7 @@ public interface TokenDataSource {
             Account account
     ) throws NoSuchAlgorithmException;
 
-    boolean isTokenValid(
+    Account isTokenValid(
             String token
     );
 }

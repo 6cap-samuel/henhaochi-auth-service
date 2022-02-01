@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sam.henhaochi.authservice.entities.Account;
 import sam.henhaochi.authservice.repositories.entities.AccountEntity;
+import sam.henhaochi.authservice.repositories.entities.TokenEntity;
+
+import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,10 +49,8 @@ class AccountEntityMapperTest {
         );
     }
 
-
     @Test
     public void shouldReturnMappedAccountEntityWithValidAccount() {
-
         Account account = Account.builder()
                 .email(EMAIL)
                 .username(USERNAME)
@@ -74,4 +75,39 @@ class AccountEntityMapperTest {
         );
     }
 
+    @Test
+    public void shouldReturnMappedAccountWithValidTokenEntity()
+            throws NoSuchAlgorithmException {
+        AccountEntity account = AccountEntity.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .build();
+
+        TokenEntity tokenEntity =
+                TokenEntity.newInstance(
+                        account
+                );
+
+        Account result = entityMapper.map(
+                tokenEntity
+        );
+
+        assertEquals(
+                EMAIL,
+                result.getEmail()
+        );
+        assertEquals(
+                USERNAME,
+                result.getUsername()
+        );
+        assertEquals(
+                PASSWORD,
+                result.getPassword()
+        );
+        assertEquals(
+                tokenEntity.getTokenString(),
+                result.getToken()
+        );
+    }
 }

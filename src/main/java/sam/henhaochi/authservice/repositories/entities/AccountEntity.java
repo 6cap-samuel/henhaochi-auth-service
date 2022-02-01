@@ -1,11 +1,9 @@
 package sam.henhaochi.authservice.repositories.entities;
 
 import lombok.*;
+import sam.henhaochi.authservice.constants.Role;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Builder
 @NoArgsConstructor
@@ -21,4 +19,7 @@ public class AccountEntity{
     private String username;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

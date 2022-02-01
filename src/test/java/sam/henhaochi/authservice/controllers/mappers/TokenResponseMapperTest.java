@@ -3,27 +3,27 @@ package sam.henhaochi.authservice.controllers.mappers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sam.henhaochi.authservice.constants.Role;
-import sam.henhaochi.authservice.controllers.responses.LoginResponse;
+import sam.henhaochi.authservice.controllers.responses.TokenResponse;
 import sam.henhaochi.authservice.entities.Account;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-class LoginAccountResponseMapperTest {
+class TokenResponseMapperTest {
 
     private static String USERNAME = "johndoe";
     private static String EMAIL = "johndoe@gmail.com";
     private static String PASSWORD = "johndoeisnice";
     private static String TOKEN = "mocktoken";
 
-    LoginAccountResponseMapper responseMapper;
+    TokenResponseMapper tokenResponseMapper;
 
     @BeforeEach
     void before() {
-        responseMapper = new LoginAccountResponseMapper();
+        tokenResponseMapper = new TokenResponseMapper();
     }
 
     @Test
-    public void shouldReturnMappedResponseMapper() {
+    public void shouldMapAccountToTokenResponse() {
         Role role = Role.ADMIN;
 
         Account account = Account.builder()
@@ -34,15 +34,12 @@ class LoginAccountResponseMapperTest {
                 .role(role)
                 .build();
 
-        LoginResponse response = responseMapper.map(account);
+        TokenResponse resposne =
+                tokenResponseMapper.map(account);
 
         assertEquals(
-                TOKEN,
-                response.getToken()
-        );
-        assertEquals(
                 role,
-                response.getRole()
+                resposne.getRole()
         );
     }
 }

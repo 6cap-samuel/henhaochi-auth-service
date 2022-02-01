@@ -35,12 +35,12 @@ public class TokenRepositoryAdapter
     }
 
     @Override
-    public boolean isTokenValid(String token) {
-        return tokenRepository.existsByTokenStringEqualsAndExpirationDateIsGreaterThan(
+    public Account isTokenValid(String token) {
+        return tokenRepository.findByTokenStringEqualsAndExpirationDateIsGreaterThan(
                 token,
                 new Timestamp(
                         System.currentTimeMillis()
                 )
-        );
+        ).map(entityMapper::map).orElse(null);
     }
 }

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import sam.henhaochi.authservice.constants.Role;
 import sam.henhaochi.authservice.utilities.HashGenerator;
 
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +20,7 @@ public class Account {
     private String email;
     private String password;
     private String token;
+    private Role role;
 
     public void encrypt()
             throws NoSuchAlgorithmException {

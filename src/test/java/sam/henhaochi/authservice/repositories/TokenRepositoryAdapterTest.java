@@ -76,16 +76,67 @@ class TokenRepositoryAdapterTest {
         }
     }
 
+    @Test
+    public void shouldReturnAccountWhenTokenIsValid()
+            throws NoSuchAlgorithmException {
+        AccountEntity accountEntity = AccountEntity.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .build();
+
+        TokenEntity tokenEntity = TokenEntity.newInstance(
+                accountEntity
+        );
+
+        Account account = Account.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .token(tokenEntity.getTokenString())
+                .build();
+
+        when(tokenRepository.findByTokenStringEqualsAndExpirationDateIsGreaterThan(
+                eq(tokenEntity.getTokenString()),
+                any()
+        )).thenReturn(
+                Optional.of(tokenEntity)
+        );
+
+        when(entityMapper.map(tokenEntity)).thenReturn(account);
+
+        assertEquals(
+                account,
+                tokenRepositoryAdapter.isTokenValid(
+                        tokenEntity.getTokenString()
+                )
+        );
+    }
 
     @Test
-    public void shouldGetToken() {
-        when(tokenRepository.existsByTokenStringEqualsAndExpirationDateIsGreaterThan(
-                eq(TOKEN),
-                any()
-        )).thenReturn(true);
+    public void shouldReturnNullWhenTokenIsInvalid()
+            throws NoSuchAlgorithmException {
+        AccountEntity accountEntity = AccountEntity.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .build();
 
-        assertTrue(
-                tokenRepositoryAdapter.isTokenValid(TOKEN)
+        TokenEntity tokenEntity = TokenEntity.newInstance(
+                accountEntity
+        );
+
+        when(tokenRepository.findByTokenStringEqualsAndExpirationDateIsGreaterThan(
+                eq(tokenEntity.getTokenString()),
+                any()
+        )).thenReturn(
+                Optional.empty()
+        );
+
+        assertNull(
+                tokenRepositoryAdapter.isTokenValid(
+                        tokenEntity.getTokenString()
+                )
         );
     }
 }

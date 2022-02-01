@@ -3,6 +3,7 @@ package sam.henhaochi.authservice.repositories.mappers;
 import org.springframework.stereotype.Service;
 import sam.henhaochi.authservice.entities.Account;
 import sam.henhaochi.authservice.repositories.entities.AccountEntity;
+import sam.henhaochi.authservice.repositories.entities.TokenEntity;
 
 @Service
 public class AccountEntityMapper {
@@ -14,6 +15,7 @@ public class AccountEntityMapper {
                  .email(account.getEmail())
                  .username(account.getUsername())
                  .password(account.getPassword())
+                 .role(account.getRole())
                  .build();
     }
 
@@ -25,6 +27,19 @@ public class AccountEntityMapper {
                 .email(entity.getEmail())
                 .username(entity.getUsername())
                 .password(entity.getPassword())
+                .role(entity.getRole())
                 .build();
+    }
+
+    public Account map(
+            TokenEntity entity
+    ) {
+        Account account = this.map(
+                entity.getAccount()
+        );
+        account.tokenize(
+                entity.getTokenString()
+        );
+        return account;
     }
 }
