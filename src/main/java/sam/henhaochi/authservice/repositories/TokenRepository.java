@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface TokenRepository
         extends CrudRepository<TokenEntity, String> {
     Optional<TokenEntity> findByTokenStringEqualsAndExpirationDateIsGreaterThan(
-            String tokenString,
-            Timestamp expirationDate
+            final String tokenString,
+            final Timestamp expirationDate
     );
 }

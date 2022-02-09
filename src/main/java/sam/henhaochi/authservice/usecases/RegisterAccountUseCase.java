@@ -18,7 +18,7 @@ public class RegisterAccountUseCase
 
     @Override
     public AccountCreationStatus with(
-            Account account
+            final Account account
     ) throws NoSuchAlgorithmException {
         account.encrypt();
         return accountDataSource.registerWith(account);

@@ -38,7 +38,7 @@ public class AccountController {
     )
     @WithCorsProtection
     public ResponseEntity<Object> register(
-            @RequestBody RegisterAccountRequest request
+            @RequestBody final RegisterAccountRequest request
     ) throws NoSuchAlgorithmException, URISyntaxException {
         logger.info("POST: /register called");
         AccountCreationStatus status = registerAccountInput.with(

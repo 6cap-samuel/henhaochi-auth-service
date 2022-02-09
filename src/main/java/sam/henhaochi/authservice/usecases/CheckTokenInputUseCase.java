@@ -15,7 +15,7 @@ public class CheckTokenInputUseCase
 
     @Override
     public Account check(
-            String token
+            final String token
     ) {
         return tokenDataSource.isTokenValid(
                 token

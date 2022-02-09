@@ -6,10 +6,10 @@ import java.security.NoSuchAlgorithmException;
 
 public interface TokenDataSource {
     String generateToken(
-            Account account
+            final Account account
     ) throws NoSuchAlgorithmException;
 
     Account isTokenValid(
-            String token
+            final String token
     );
 }

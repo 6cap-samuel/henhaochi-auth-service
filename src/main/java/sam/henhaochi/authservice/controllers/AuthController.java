@@ -12,7 +12,6 @@ import sam.henhaochi.authservice.controllers.mappers.LoginAccountRequestMapper;
 import sam.henhaochi.authservice.controllers.mappers.LoginAccountResponseMapper;
 import sam.henhaochi.authservice.controllers.mappers.TokenResponseMapper;
 import sam.henhaochi.authservice.controllers.requests.LoginRequest;
-import sam.henhaochi.authservice.controllers.responses.TokenResponse;
 import sam.henhaochi.authservice.entities.Account;
 import sam.henhaochi.authservice.usecases.in.CheckTokenInput;
 import sam.henhaochi.authservice.usecases.in.LoginAccountInput;
@@ -36,7 +35,7 @@ public class AuthController {
     @PostMapping("/login")
     @WithCorsProtection
     public ResponseEntity<Object> loginWithUsernameAndPassword(
-            @RequestBody LoginRequest loginRequest
+            @RequestBody final LoginRequest loginRequest
     ) throws NoSuchAlgorithmException {
         logger.info("POST: /login called");
         Account foundAccount = loginAccountInput.with(
@@ -63,7 +62,7 @@ public class AuthController {
     @GetMapping("/token")
     @WithCorsProtection
     public ResponseEntity<Object> checktokenValidity(
-            @RequestHeader("token") String token
+            @RequestHeader("token") final String token
     ) {
         logger.info("POST: /token called");
 

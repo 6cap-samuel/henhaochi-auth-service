@@ -6,6 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 public interface LoginAccountInput {
     Account with(
-            Account account
+            final Account account
     ) throws NoSuchAlgorithmException;
 }

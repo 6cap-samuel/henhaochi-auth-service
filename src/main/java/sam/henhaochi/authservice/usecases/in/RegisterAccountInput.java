@@ -7,6 +7,6 @@ import java.security.NoSuchAlgorithmException;
 
 public interface RegisterAccountInput {
     AccountCreationStatus with(
-            Account account
+            final Account account
     ) throws NoSuchAlgorithmException;
 }

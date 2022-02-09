@@ -28,7 +28,7 @@ public class Account {
     }
 
     public void tokenize(
-            String token
+            final String token
     ) {
         this.token = token;
     }

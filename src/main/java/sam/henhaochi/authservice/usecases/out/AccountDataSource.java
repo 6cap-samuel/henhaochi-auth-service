@@ -5,9 +5,9 @@ import sam.henhaochi.authservice.entities.Account;
 
 public interface AccountDataSource {
     Account loginWith(
-            Account account
+            final Account account
     );
     AccountCreationStatus registerWith(
-            Account account
+            final Account account
     );
 }

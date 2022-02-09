@@ -7,7 +7,7 @@ import sam.henhaochi.authservice.entities.Account;
 @Service
 public class LoginAccountResponseMapper {
     public LoginResponse map(
-            Account account
+            final Account account
     ){
         return LoginResponse.builder()
                 .token(account.getToken())

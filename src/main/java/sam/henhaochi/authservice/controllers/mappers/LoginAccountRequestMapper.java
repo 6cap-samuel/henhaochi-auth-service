@@ -7,7 +7,7 @@ import sam.henhaochi.authservice.entities.Account;
 @Service
 public class LoginAccountRequestMapper {
     public Account mapToAccountEntity(
-            LoginRequest request
+            final LoginRequest request
     ){
         return Account.builder()
                 .username(request.username)

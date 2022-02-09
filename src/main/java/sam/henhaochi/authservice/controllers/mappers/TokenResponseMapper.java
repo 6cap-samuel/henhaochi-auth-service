@@ -6,9 +6,8 @@ import sam.henhaochi.authservice.entities.Account;
 
 @Service
 public class TokenResponseMapper {
-
     public TokenResponse map(
-            Account account
+            final Account account
     ) {
         return TokenResponse.builder()
                 .role(account.getRole())

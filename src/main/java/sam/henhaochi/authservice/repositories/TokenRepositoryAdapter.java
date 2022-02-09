@@ -20,14 +20,16 @@ public class TokenRepositoryAdapter
     final AccountEntityMapper entityMapper;
 
     @Override
-    public String generateToken(Account account)
-            throws NoSuchAlgorithmException {
+    public String generateToken(
+            final Account account
+    ) throws NoSuchAlgorithmException {
         AccountEntity accountEntity =
                 entityMapper.map(account);
 
-        TokenEntity tokenEntity = TokenEntity.newInstance(
-                accountEntity
-        );
+        TokenEntity tokenEntity =
+                TokenEntity.newInstance(
+                        accountEntity
+                );
 
         tokenRepository.save(tokenEntity);
 
@@ -35,7 +37,9 @@ public class TokenRepositoryAdapter
     }
 
     @Override
-    public Account isTokenValid(String token) {
+    public Account isTokenValid(
+            final String token
+    ) {
         return tokenRepository.findByTokenStringEqualsAndExpirationDateIsGreaterThan(
                 token,
                 new Timestamp(

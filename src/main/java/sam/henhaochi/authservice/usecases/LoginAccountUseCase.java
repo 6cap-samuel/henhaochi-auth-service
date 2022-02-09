@@ -21,7 +21,7 @@ public class LoginAccountUseCase
     @Override
     @Transactional
     public Account with(
-            Account account
+            final Account account
     ) throws NoSuchAlgorithmException {
         account.encrypt();
         Account found = accountDataSource.loginWith(account);

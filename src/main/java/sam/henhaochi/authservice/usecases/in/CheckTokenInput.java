@@ -4,6 +4,6 @@ import sam.henhaochi.authservice.entities.Account;
 
 public interface CheckTokenInput {
     Account check(
-            String token
+            final String token
     );
 }

@@ -19,7 +19,7 @@ public class AccountRepositoryAdapter
 
     @Override
     public AccountCreationStatus registerWith(
-            Account account
+            final Account account
     ) {
         if (!accountRepository.existsByEmailEqualsIgnoreCase(
                 account.getEmail()
@@ -38,7 +38,7 @@ public class AccountRepositoryAdapter
     @Nullable
     @Override
     public Account loginWith(
-            Account account
+            final Account account
     ) {
         return accountRepository.login(
                 account.getEmail(),
