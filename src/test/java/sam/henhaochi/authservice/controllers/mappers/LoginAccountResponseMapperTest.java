@@ -30,7 +30,7 @@ class LoginAccountResponseMapperTest {
                 .token(TOKEN)
                 .build();
 
-        LoginResponse response = responseMapper.map(account);
+        LoginResponse response = responseMapper.mapToLoginResponse(account);
 
         assertEquals(
                 TOKEN,

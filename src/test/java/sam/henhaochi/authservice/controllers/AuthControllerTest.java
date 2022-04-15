@@ -13,6 +13,7 @@ import sam.henhaochi.authservice.controllers.responses.LoginResponse;
 import sam.henhaochi.authservice.entities.Account;
 import sam.henhaochi.authservice.usecases.in.CheckTokenInput;
 import sam.henhaochi.authservice.usecases.in.LoginAccountInput;
+import sam.henhaochi.authservice.usecases.in.ValidateProfileInput;
 import sam.henhaochi.authservice.utilities.Json;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -44,6 +45,9 @@ class AuthControllerTest {
     @MockBean
     CheckTokenInput checkTokenInput;
 
+    @MockBean
+    ValidateProfileInput validateProfileInput;
+
     @Test
     public void shouldReturnProfileWhenAccountIsValid()
             throws Exception {
@@ -72,7 +76,7 @@ class AuthControllerTest {
                 .token(TOKEN)
                 .build();
 
-        when(loginAccountResponseMapper.map(
+        when(loginAccountResponseMapper.mapToLoginResponse(
                 mappedAccount)
         ).thenReturn(response);
 

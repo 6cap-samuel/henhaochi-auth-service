@@ -12,8 +12,10 @@ import sam.henhaochi.authservice.controllers.mappers.LoginAccountRequestMapper;
 import sam.henhaochi.authservice.controllers.mappers.LoginAccountResponseMapper;
 import sam.henhaochi.authservice.controllers.requests.LoginRequest;
 import sam.henhaochi.authservice.entities.Account;
+import sam.henhaochi.authservice.exceptions.EmptyResult;
 import sam.henhaochi.authservice.usecases.in.CheckTokenInput;
 import sam.henhaochi.authservice.usecases.in.LoginAccountInput;
+import sam.henhaochi.authservice.usecases.in.ValidateProfileInput;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -25,7 +27,9 @@ public class AuthController {
     final LoginAccountInput loginAccountInput;
     final LoginAccountRequestMapper loginAccountRequestMapper;
     final LoginAccountResponseMapper loginAccountResponseMapper;
+
     final CheckTokenInput checkTokenInput;
+    final ValidateProfileInput validateProfileInput;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AuthController.class);
@@ -51,7 +55,7 @@ public class AuthController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(loginAccountResponseMapper.map(
+                    .body(loginAccountResponseMapper.mapToLoginResponse(
                             foundAccount)
                     );
         }
@@ -70,6 +74,24 @@ public class AuthController {
         } else {
             return ResponseEntity.status(
                     HttpStatus.FORBIDDEN
+            ).build();
+        }
+    }
+
+    @GetMapping("/validate")
+    @WithCorsProtection
+    public ResponseEntity<Object> getProfile(
+            @RequestHeader("token") String token
+    ) {
+        try {
+             return ResponseEntity.ok(
+                     loginAccountResponseMapper.mapToValidateResponse(
+                             validateProfileInput.with(token)
+                     )
+             );
+        } catch (EmptyResult emptyResult){
+            return ResponseEntity.status(
+                    HttpStatus.NOT_FOUND
             ).build();
         }
     }

@@ -14,6 +14,7 @@ public class AccountEntityMapper {
                  .email(account.getEmail())
                  .username(account.getUsername())
                  .password(account.getPassword())
+                 .role(account.getRole())
                  .build();
     }
 
@@ -25,6 +26,7 @@ public class AccountEntityMapper {
                 .email(entity.getEmail())
                 .username(entity.getUsername())
                 .password(entity.getPassword())
+                .role(entity.getRole())
                 .build();
     }
 }

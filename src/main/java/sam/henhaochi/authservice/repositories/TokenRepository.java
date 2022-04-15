@@ -1,6 +1,5 @@
 package sam.henhaochi.authservice.repositories;
 
-import com.google.common.base.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import sam.henhaochi.authservice.repositories.entities.TokenEntity;
