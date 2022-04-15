@@ -12,6 +12,7 @@ public class LoginAccountResponseMapper {
     ){
         return LoginResponse.builder()
                 .token(account.getToken())
+                .role(account.getRole())
                 .build();
     }
 

@@ -53,13 +53,13 @@ public class TokenRepositoryAdapter
         Optional<TokenEntity> foundToken =
                 tokenRepository.findById(token);
 
-        if (foundToken.isEmpty()) {
-            throw new EmptyResult("No such token");
+        if (foundToken.isPresent()) {
+            return entityMapper.map(
+                    foundToken.get()
+                            .getAccount()
+            );
         }
 
-        return entityMapper.map(
-                foundToken.get()
-                        .getAccount()
-        );
+        throw new EmptyResult("No such token");
     }
 }
