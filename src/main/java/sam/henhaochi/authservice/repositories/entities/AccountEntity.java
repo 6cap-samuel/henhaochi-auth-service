@@ -5,7 +5,6 @@ import sam.henhaochi.authservice.constants.Role;
 
 import javax.persistence.*;
 
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

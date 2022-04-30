@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sam.henhaochi.authservice.annotations.methods.WithCorsProtection;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
 import sam.henhaochi.authservice.controllers.mappers.RegisterAccountRequestMapper;
 import sam.henhaochi.authservice.controllers.requests.RegisterAccountRequest;
 import sam.henhaochi.authservice.usecases.in.RegisterAccountInput;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
@@ -36,21 +33,26 @@ public class AccountController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @WithCorsProtection
     public ResponseEntity<Object> register(
             @RequestBody RegisterAccountRequest request
-    ) throws NoSuchAlgorithmException, URISyntaxException {
+    ) throws NoSuchAlgorithmException {
+
         logger.info("POST: /register called");
         AccountCreationStatus status = registerAccountInput.with(
-                requestMapper.mapToAccountEntity(
-                        request
-                )
+                RegisterAccountRequest.Mapper
+                        .mapToRegisterUseCase(
+                                request
+                        )
         );
-        if (status.equals(AccountCreationStatus.SUCCESS)){
-            return ResponseEntity.created(
-                    new URI("https://henhaochi.io")
-            ).build();
+
+        if (status.equals(AccountCreationStatus.UNVERIFIED)) {
+            return ResponseEntity.status(
+                    HttpStatus.CREATED
+            ).body(
+                    AccountCreationStatus.UNVERIFIED
+            );
         }
+
         return ResponseEntity.status(
                 HttpStatus.CONFLICT
         ).build();

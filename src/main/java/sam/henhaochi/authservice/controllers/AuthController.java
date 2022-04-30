@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/auth/v1")
 public class AuthController {
 
     final LoginAccountInput loginAccountInput;

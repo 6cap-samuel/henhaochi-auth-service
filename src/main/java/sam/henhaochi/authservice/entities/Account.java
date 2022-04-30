@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import sam.henhaochi.authservice.constants.Role;
 import sam.henhaochi.authservice.utilities.HashGenerator;
 
