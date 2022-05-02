@@ -10,8 +10,10 @@ import sam.henhaochi.authservice.constants.AccountCreationStatus;
 import sam.henhaochi.authservice.constants.Role;
 import sam.henhaochi.authservice.repositories.entities.AuthorityEntity;
 import sam.henhaochi.authservice.repositories.entities.UserDetailsEntity;
-import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
 import sam.henhaochi.authservice.usecases.interfaces.out.UserDetailsDataSource;
+import sam.henhaochi.authservice.usecases.models.out.requests.RegisterRequest;
+import sam.henhaochi.authservice.usecases.models.out.responses.RegisterResponse;
+import sam.henhaochi.authservice.usecases.models.out.responses.UserDetailsDataSourceResponseModel;
 
 import javax.transaction.Transactional;
 import java.util.Set;
@@ -39,12 +41,12 @@ public class UserDetailsAdapter implements
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public AccountCreationStatus register(
-            final RegisterAccountUseCaseRequestModel registerAccountUseCaseRequestModel
+    public RegisterResponse register(
+            final RegisterRequest registerRequest
     ) {
         UserDetailsEntity mappedRepositoryEntity =
-                UserDetailsEntity.Mapper.fromRegisterUseCase(
-                        registerAccountUseCaseRequestModel,
+                UserDetailsEntity.Mapper.from(
+                        registerRequest,
                         Set.of(AuthorityEntity.Factory.newInstance(Role.ROLE_USER.name()))
                 );
 
@@ -56,11 +58,16 @@ public class UserDetailsAdapter implements
                 )
         );
 
-        return this.userDetailsRepository.existsByUsernameOrEmail(
-                mappedRepositoryEntity.getUsername(),
-                mappedRepositoryEntity.getEmail()
-        ) ? AccountCreationStatus.USERNAME_EXIST
-                : this.createUser(mappedRepositoryEntity);
+        AccountCreationStatus accountCreationStatus =
+                this.userDetailsRepository.existsByUsernameOrEmail(
+                        mappedRepositoryEntity.getUsername(),
+                        mappedRepositoryEntity.getEmail()
+                ) ? AccountCreationStatus.USERNAME_EXIST
+                        : this.createUser(mappedRepositoryEntity);
+
+        return UserDetailsDataSourceResponseModel.Factory.newRegisterResponse(
+                accountCreationStatus
+        );
     }
 
     private AccountCreationStatus createUser(

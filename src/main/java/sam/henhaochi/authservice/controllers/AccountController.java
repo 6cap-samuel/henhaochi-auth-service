@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
 import sam.henhaochi.authservice.controllers.requests.RegisterAccountRequest;
 import sam.henhaochi.authservice.usecases.interfaces.in.RegisterAccountInput;
-import sam.henhaochi.authservice.usecases.models.out.RegisterAccountUseCaseResponseModel;
+import sam.henhaochi.authservice.usecases.models.in.responses.RegisterAccountUseCaseResponse;
 
 @RestController
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class AccountController {
             @RequestBody RegisterAccountRequest request
     ) {
         logger.info("POST: /register called");
-        RegisterAccountUseCaseResponseModel responseModel = registerAccountInput.create(
+        RegisterAccountUseCaseResponse responseModel = registerAccountInput.create(
                 RegisterAccountRequest.Mapper
                         .mapToRegisterUseCase(
                                 request

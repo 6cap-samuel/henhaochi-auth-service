@@ -1,4 +1,4 @@
-package sam.henhaochi.authservice.usecases.models.in;
+package sam.henhaochi.authservice.usecases.models.in.requests;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,19 +7,19 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor(staticName = "of")
-public class LoginAccountUseCaseRequestModel {
-    private String username;
-    private String password;
-    private String email;
+public class LoginAccountUseCaseRequest {
+    private final String username;
+    private final String password;
+    private final String email;
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Factory {
-         public static LoginAccountUseCaseRequestModel newInstance(
+         public static LoginAccountUseCaseRequest newInstance(
                  final String username,
                  final String password,
                  final String email
          ) {
-             return LoginAccountUseCaseRequestModel.of(
+             return LoginAccountUseCaseRequest.of(
                      username,
                      password,
                      email

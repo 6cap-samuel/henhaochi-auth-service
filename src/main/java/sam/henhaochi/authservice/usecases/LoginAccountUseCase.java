@@ -5,10 +5,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import sam.henhaochi.authservice.usecases.interfaces.in.LoginAccountInput;
-import sam.henhaochi.authservice.usecases.models.in.LoginAccountUseCaseRequestModel;
-import sam.henhaochi.authservice.usecases.models.out.LoginAccountUseCaseResponseModel;
+import sam.henhaochi.authservice.usecases.models.in.requests.LoginAccountUseCaseRequest;
+import sam.henhaochi.authservice.usecases.models.in.responses.LoginAccountUseCaseResponse;
 import sam.henhaochi.authservice.usecases.interfaces.out.EncodingDataSource;
 import sam.henhaochi.authservice.usecases.interfaces.out.JwtDataSource;
+import sam.henhaochi.authservice.usecases.models.out.requests.EncodingDataSourceRequestModel;
+import sam.henhaochi.authservice.usecases.models.out.requests.JwtDataSourceRequestModel;
 
 import javax.transaction.Transactional;
 
@@ -17,32 +19,38 @@ import javax.transaction.Transactional;
 public class LoginAccountUseCase
         implements LoginAccountInput {
 
-    final UserDetailsService userDetailsService;
-    final EncodingDataSource encodingDataSource;
-    final JwtDataSource jwtDataSource;
+    private final UserDetailsService userDetailsService;
+    private final EncodingDataSource encodingDataSource;
+    private final JwtDataSource jwtDataSource;
 
     @Override
     @Transactional
-    public LoginAccountUseCaseResponseModel with(
-            final LoginAccountUseCaseRequestModel loginAccountUseCaseRequestModel
+    public LoginAccountUseCaseResponse with(
+            final LoginAccountUseCaseRequest loginAccountUseCaseRequestModel
     ) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(
                 loginAccountUseCaseRequestModel.getUsername()
         );
 
         if (userDetails.isEnabled()) {
-             return LoginAccountUseCaseResponseModel.Factory.unverified();
+             return LoginAccountUseCaseResponse.Factory.unverified();
         }
 
         if (encodingDataSource.isPasswordCorrect(
-                loginAccountUseCaseRequestModel,
-                userDetails)
+                EncodingDataSourceRequestModel.Factory.newPasswordRequestInstance(
+                        loginAccountUseCaseRequestModel.getPassword(),
+                        userDetails.getPassword()
+                )).isPasswordValid()
         ) {
-            return LoginAccountUseCaseResponseModel.Factory.success(
-                    jwtDataSource.generateJwt(userDetails)
+
+            return LoginAccountUseCaseResponse.Factory.success(
+                    jwtDataSource.generateJwt(
+                            JwtDataSourceRequestModel.Factory
+                                    .newGenerateJwtRequest(userDetails)
+                    ).getJwtString()
             );
         }
 
-        return LoginAccountUseCaseResponseModel.Factory.fail();
+        return LoginAccountUseCaseResponse.Factory.fail();
     }
 }

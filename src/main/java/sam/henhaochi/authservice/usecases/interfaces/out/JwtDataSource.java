@@ -1,7 +1,10 @@
 package sam.henhaochi.authservice.usecases.interfaces.out;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import sam.henhaochi.authservice.usecases.models.out.requests.GenerateJwtRequest;
+import sam.henhaochi.authservice.usecases.models.out.responses.GenerateJwtResponse;
 
 public interface JwtDataSource {
-     String generateJwt(final UserDetails userDetails);
+     GenerateJwtResponse generateJwt(
+             final GenerateJwtRequest generateJwtRequest
+     );
 }

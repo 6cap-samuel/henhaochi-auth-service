@@ -1,10 +1,10 @@
 package sam.henhaochi.authservice.usecases.interfaces.out;
 
-import sam.henhaochi.authservice.constants.AccountCreationStatus;
-import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
+import sam.henhaochi.authservice.usecases.models.out.requests.RegisterRequest;
+import sam.henhaochi.authservice.usecases.models.out.responses.RegisterResponse;
 
 public interface UserDetailsDataSource {
-    AccountCreationStatus register(
-            final RegisterAccountUseCaseRequestModel registerAccountUseCaseRequestModel
+    RegisterResponse register(
+            final RegisterRequest registerRequest
     );
 }

@@ -3,10 +3,14 @@ package sam.henhaochi.authservice.usecases;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sam.henhaochi.authservice.usecases.interfaces.in.RegisterAccountInput;
-import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
+import sam.henhaochi.authservice.usecases.models.in.requests.RegisterAccountUseCaseRequest;
 import sam.henhaochi.authservice.usecases.interfaces.out.EncodingDataSource;
 import sam.henhaochi.authservice.usecases.interfaces.out.UserDetailsDataSource;
-import sam.henhaochi.authservice.usecases.models.out.RegisterAccountUseCaseResponseModel;
+import sam.henhaochi.authservice.usecases.models.in.responses.RegisterAccountUseCaseResponse;
+import sam.henhaochi.authservice.usecases.models.out.requests.EncodingDataSourceRequestModel;
+import sam.henhaochi.authservice.usecases.models.out.requests.UserDetailsDataSourceRequestModel;
+import sam.henhaochi.authservice.usecases.models.out.responses.EncodePasswordResponse;
+import sam.henhaochi.authservice.usecases.models.out.responses.RegisterResponse;
 
 @Service
 @AllArgsConstructor
@@ -17,15 +21,25 @@ public class RegisterAccountUseCase
     private final EncodingDataSource encodingDataSource;
 
     @Override
-    public RegisterAccountUseCaseResponseModel create(
-            final RegisterAccountUseCaseRequestModel registerAccountModel
+    public RegisterAccountUseCaseResponse create(
+            final RegisterAccountUseCaseRequest registerAccountModel
     ) {
-        return RegisterAccountUseCaseResponseModel.Factory.newInstance(
-                userDetailsDataSource.register(
-                        encodingDataSource.encodePassword(
-                                registerAccountModel
+        EncodePasswordResponse encodePasswordResponse =
+                encodingDataSource.encodePassword(
+                        EncodingDataSourceRequestModel.Factory.newEncodePasswordInstance(
+                                registerAccountModel.getPassword()
                         )
+                );
+
+        RegisterResponse registerResponse = userDetailsDataSource.register(
+                UserDetailsDataSourceRequestModel.Factory.newRegisterRequest(
+                        registerAccountModel.getUsername(),
+                        registerAccountModel.getEmail(),
+                        encodePasswordResponse.getEncodedPassword()
                 )
         );
+
+        return RegisterAccountUseCaseResponse.Factory
+                .newInstance(registerResponse.getAccountCreationStatus());
     }
 }

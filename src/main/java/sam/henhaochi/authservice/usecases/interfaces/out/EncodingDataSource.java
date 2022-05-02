@@ -1,15 +1,16 @@
 package sam.henhaochi.authservice.usecases.interfaces.out;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import sam.henhaochi.authservice.usecases.models.in.LoginAccountUseCaseRequestModel;
-import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
+import sam.henhaochi.authservice.usecases.models.out.requests.CheckPasswordRequest;
+import sam.henhaochi.authservice.usecases.models.out.requests.EncodePasswordRequest;
+import sam.henhaochi.authservice.usecases.models.out.responses.CheckPasswordResponse;
+import sam.henhaochi.authservice.usecases.models.out.responses.EncodePasswordResponse;
 
 public interface EncodingDataSource {
-    RegisterAccountUseCaseRequestModel encodePassword(
-            RegisterAccountUseCaseRequestModel registerAccountUseCaseRequestModel
+    EncodePasswordResponse encodePassword(
+            final EncodePasswordRequest encodePasswordRequest
     );
-    boolean isPasswordCorrect(
-            LoginAccountUseCaseRequestModel loginAccountUseCaseRequestModel,
-            UserDetails userDetails
+
+    CheckPasswordResponse isPasswordCorrect(
+            final CheckPasswordRequest checkPasswordRequest
     );
 }

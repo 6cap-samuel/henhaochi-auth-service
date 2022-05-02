@@ -1,4 +1,4 @@
-package sam.henhaochi.authservice.usecases.models.out;
+package sam.henhaochi.authservice.usecases.models.in.responses;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,15 +8,15 @@ import sam.henhaochi.authservice.constants.AccountCreationStatus;
 
 @Data
 @AllArgsConstructor(staticName = "of")
-public class RegisterAccountUseCaseResponseModel {
+public class RegisterAccountUseCaseResponse {
     private final AccountCreationStatus accountCreationStatus;
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Factory {
-        public static RegisterAccountUseCaseResponseModel newInstance(
+        public static RegisterAccountUseCaseResponse newInstance(
                 final AccountCreationStatus accountCreationStatus
         ) {
-             return RegisterAccountUseCaseResponseModel.of(
+             return RegisterAccountUseCaseResponse.of(
                      accountCreationStatus
              );
         }

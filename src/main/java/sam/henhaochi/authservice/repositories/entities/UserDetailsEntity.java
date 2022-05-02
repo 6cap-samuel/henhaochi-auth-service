@@ -3,7 +3,7 @@ package sam.henhaochi.authservice.repositories.entities;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
+import sam.henhaochi.authservice.usecases.models.out.requests.RegisterRequest;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -90,14 +90,14 @@ public class UserDetailsEntity implements UserDetails {
     }
 
     public static class Mapper {
-         public static UserDetailsEntity fromRegisterUseCase(
-                 final RegisterAccountUseCaseRequestModel registerAccountUseCaseRequestModel,
+         public static UserDetailsEntity from(
+                 final RegisterRequest registerRequest,
                  final Set<AuthorityEntity> authorityEntities
          ) {
              return UserDetailsEntity.Factory.newNormalUserInstance(
-                     registerAccountUseCaseRequestModel.getUsername(),
-                     registerAccountUseCaseRequestModel.getPassword(),
-                     registerAccountUseCaseRequestModel.getEmail(),
+                     registerRequest.getUsername(),
+                     registerRequest.getPassword(),
+                     registerRequest.getEmail(),
                      authorityEntities
              );
          }

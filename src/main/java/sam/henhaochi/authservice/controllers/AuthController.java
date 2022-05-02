@@ -7,29 +7,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sam.henhaochi.authservice.annotations.methods.WithCorsProtection;
 import sam.henhaochi.authservice.controllers.requests.LoginRequest;
 import sam.henhaochi.authservice.usecases.interfaces.in.LoginAccountInput;
-import sam.henhaochi.authservice.usecases.models.out.LoginAccountUseCaseResponseModel;
-
+import sam.henhaochi.authservice.usecases.models.in.responses.LoginAccountUseCaseResponse;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/auth/v1")
 public class AuthController {
 
-    final LoginAccountInput loginAccountInput;
+    private final LoginAccountInput loginAccountInput;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/login")
-    @WithCorsProtection
     public ResponseEntity<Object> loginWithUsernameAndPassword(
             @RequestBody LoginRequest loginRequest
     ) {
         logger.info("POST: /login called");
-        LoginAccountUseCaseResponseModel foundAccount = loginAccountInput.with(
+        LoginAccountUseCaseResponse foundAccount = loginAccountInput.with(
                 LoginRequest.Mapper.mapToLoginRequestModel(
                         loginRequest
                 )
