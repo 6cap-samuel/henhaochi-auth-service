@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
-import sam.henhaochi.authservice.controllers.mappers.RegisterAccountRequestMapper;
 import sam.henhaochi.authservice.controllers.requests.RegisterAccountRequest;
-import sam.henhaochi.authservice.usecases.in.RegisterAccountInput;
-
-import java.security.NoSuchAlgorithmException;
+import sam.henhaochi.authservice.usecases.interfaces.in.RegisterAccountInput;
 
 @RestController
 @AllArgsConstructor
@@ -23,7 +20,6 @@ import java.security.NoSuchAlgorithmException;
 public class AccountController {
 
     final RegisterAccountInput registerAccountInput;
-    final RegisterAccountRequestMapper requestMapper;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AccountController.class);
@@ -35,10 +31,9 @@ public class AccountController {
     )
     public ResponseEntity<Object> register(
             @RequestBody RegisterAccountRequest request
-    ) throws NoSuchAlgorithmException {
-
+    ) {
         logger.info("POST: /register called");
-        AccountCreationStatus status = registerAccountInput.with(
+        AccountCreationStatus status = registerAccountInput.create(
                 RegisterAccountRequest.Mapper
                         .mapToRegisterUseCase(
                                 request

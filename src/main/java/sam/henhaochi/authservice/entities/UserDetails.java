@@ -1,7 +1,7 @@
 package sam.henhaochi.authservice.entities;
 
 import lombok.*;
-import sam.henhaochi.authservice.usecases.models.RegisterAccountUseCaseModel;
+import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
 
 @Data
 @AllArgsConstructor(staticName = "of")
@@ -24,18 +24,5 @@ public class UserDetails {
                       email
               );
          }
-    }
-
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Mapper {
-        public static UserDetails mapFromRegisterUseCase (
-                final RegisterAccountUseCaseModel registerAccountUseCaseModel
-        ) {
-            return UserDetails.Factory.newInstance(
-                    registerAccountUseCaseModel.getUsername(),
-                    registerAccountUseCaseModel.getPassword(),
-                    registerAccountUseCaseModel.getEmail()
-            );
-        }
     }
 }

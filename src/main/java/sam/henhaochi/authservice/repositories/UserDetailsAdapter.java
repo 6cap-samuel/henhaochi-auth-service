@@ -2,20 +2,19 @@ package sam.henhaochi.authservice.repositories;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
-import sam.henhaochi.authservice.entities.Account;
+import sam.henhaochi.authservice.constants.Role;
+import sam.henhaochi.authservice.repositories.entities.AuthorityEntity;
 import sam.henhaochi.authservice.repositories.entities.UserDetailsEntity;
-import sam.henhaochi.authservice.usecases.models.RegisterAccountUseCaseModel;
-import sam.henhaochi.authservice.usecases.out.UserDetailsDataSource;
+import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
+import sam.henhaochi.authservice.usecases.interfaces.out.UserDetailsDataSource;
 
 import javax.transaction.Transactional;
+import java.util.Set;
 
 @Repository
 @AllArgsConstructor
@@ -41,10 +40,13 @@ public class UserDetailsAdapter implements
     @Override
     @Transactional(rollbackOn = Exception.class)
     public AccountCreationStatus register(
-            final RegisterAccountUseCaseModel registerAccountUseCaseModel
+            final RegisterAccountUseCaseRequestModel registerAccountUseCaseRequestModel
     ) {
         UserDetailsEntity mappedRepositoryEntity =
-                UserDetailsEntity.Mapper.fromRegisterUseCase(registerAccountUseCaseModel);
+                UserDetailsEntity.Mapper.fromRegisterUseCase(
+                        registerAccountUseCaseRequestModel,
+                        Set.of(AuthorityEntity.Factory.newInstance(Role.ROLE_USER.name()))
+                );
 
         log.info(
                 String.format(
@@ -54,7 +56,7 @@ public class UserDetailsAdapter implements
                 )
         );
 
-        return this.userDetailsRepository.existsByUsernameAndEmail(
+        return this.userDetailsRepository.existsByUsernameOrEmail(
                 mappedRepositoryEntity.getUsername(),
                 mappedRepositoryEntity.getEmail()
         ) ? AccountCreationStatus.USERNAME_EXIST

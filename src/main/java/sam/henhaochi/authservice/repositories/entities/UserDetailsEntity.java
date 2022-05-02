@@ -3,11 +3,10 @@ package sam.henhaochi.authservice.repositories.entities;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import sam.henhaochi.authservice.usecases.models.RegisterAccountUseCaseModel;
+import sam.henhaochi.authservice.constants.Role;
+import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
@@ -28,7 +27,11 @@ public class UserDetailsEntity implements UserDetails {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
-    @OneToMany
+    @OneToMany(
+            targetEntity = AuthorityEntity.class,
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(name = "username")
     private Set<AuthorityEntity> authorities;
 
     @Override
@@ -71,7 +74,8 @@ public class UserDetailsEntity implements UserDetails {
         public static UserDetailsEntity newNormalUserInstance(
                 final String username,
                 final String password,
-                final String email
+                final String email,
+                final Set<AuthorityEntity> authorityEntities
         ) {
             return UserDetailsEntity.of(
                     username,
@@ -81,19 +85,21 @@ public class UserDetailsEntity implements UserDetails {
                     false,
                     false,
                     true,
-                    Set.of()
+                    authorityEntities
             );
         }
     }
 
     public static class Mapper {
          public static UserDetailsEntity fromRegisterUseCase(
-                 final RegisterAccountUseCaseModel registerAccountUseCaseModel
+                 final RegisterAccountUseCaseRequestModel registerAccountUseCaseRequestModel,
+                 final Set<AuthorityEntity> authorityEntities
          ) {
              return UserDetailsEntity.Factory.newNormalUserInstance(
-                     registerAccountUseCaseModel.getUsername(),
-                     registerAccountUseCaseModel.getPassword(),
-                     registerAccountUseCaseModel.getEmail()
+                     registerAccountUseCaseRequestModel.getUsername(),
+                     registerAccountUseCaseRequestModel.getPassword(),
+                     registerAccountUseCaseRequestModel.getEmail(),
+                     authorityEntities
              );
          }
     }

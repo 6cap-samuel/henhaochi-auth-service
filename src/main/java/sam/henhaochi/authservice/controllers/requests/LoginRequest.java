@@ -1,12 +1,26 @@
 package sam.henhaochi.authservice.controllers.requests;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import sam.henhaochi.authservice.usecases.models.in.LoginAccountUseCaseRequestModel;
 
 @Data
+@AllArgsConstructor
 @Builder
 public class LoginRequest {
-    public String username;
-    public String password;
-    public String email;
+    private String username;
+    private String password;
+    private String email;
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Mapper {
+        public static LoginAccountUseCaseRequestModel mapToLoginRequestModel(
+                final LoginRequest loginRequest
+        ) {
+            return LoginAccountUseCaseRequestModel.Factory.newInstance(
+                    loginRequest.getUsername(),
+                    loginRequest.getPassword(),
+                    loginRequest.getEmail()
+            );
+        }
+    }
 }

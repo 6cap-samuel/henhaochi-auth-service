@@ -1,7 +1,7 @@
 package sam.henhaochi.authservice.constants;
 
 public enum Role {
-    USER,
-    OWNER,
-    ADMIN
+    ROLE_USER,
+    ROLE_OWNER,
+    ROLE_ADMIN;
 }
