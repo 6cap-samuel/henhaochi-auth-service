@@ -3,7 +3,6 @@ package sam.henhaochi.authservice.repositories.entities;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import sam.henhaochi.authservice.constants.Role;
 import sam.henhaochi.authservice.usecases.models.in.RegisterAccountUseCaseRequestModel;
 
 import javax.persistence.*;
@@ -84,7 +83,7 @@ public class UserDetailsEntity implements UserDetails {
                     false,
                     false,
                     false,
-                    true,
+                    false,
                     authorityEntities
             );
         }

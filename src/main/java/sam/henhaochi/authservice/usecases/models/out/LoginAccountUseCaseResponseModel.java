@@ -13,12 +13,20 @@ public class LoginAccountUseCaseResponseModel {
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Factory {
+
         public static LoginAccountUseCaseResponseModel success (
                 final String token
         ) {
             return LoginAccountUseCaseResponseModel.of(
                     LoginStatus.YES,
                     token
+            );
+        }
+
+        public static LoginAccountUseCaseResponseModel unverified() {
+            return LoginAccountUseCaseResponseModel.of(
+                    LoginStatus.NO,
+                    null
             );
         }
 

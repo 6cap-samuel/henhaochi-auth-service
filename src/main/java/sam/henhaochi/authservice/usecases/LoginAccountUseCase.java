@@ -30,7 +30,14 @@ public class LoginAccountUseCase
                 loginAccountUseCaseRequestModel.getUsername()
         );
 
-        if (encodingDataSource.isPasswordCorrect(loginAccountUseCaseRequestModel, userDetails)) {
+        if (userDetails.isEnabled()) {
+             return LoginAccountUseCaseResponseModel.Factory.unverified();
+        }
+
+        if (encodingDataSource.isPasswordCorrect(
+                loginAccountUseCaseRequestModel,
+                userDetails)
+        ) {
             return LoginAccountUseCaseResponseModel.Factory.success(
                     jwtDataSource.generateJwt(userDetails)
             );
