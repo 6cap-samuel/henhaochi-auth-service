@@ -12,15 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
 import sam.henhaochi.authservice.controllers.requests.RegisterAccountRequest;
+import sam.henhaochi.authservice.controllers.requests.VerifyAccountRequest;
 import sam.henhaochi.authservice.usecases.interfaces.in.RegisterAccountInput;
+import sam.henhaochi.authservice.usecases.interfaces.in.VerifyAccountInput;
 import sam.henhaochi.authservice.usecases.models.in.responses.RegisterAccountUseCaseResponse;
+import sam.henhaochi.authservice.usecases.models.in.responses.VerifyAccountUseCaseResponse;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/accounts")
 public class AccountController {
 
-    final RegisterAccountInput registerAccountInput;
+    private final RegisterAccountInput registerAccountInput;
+    private final VerifyAccountInput verifyAccountInput;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AccountController.class);
@@ -51,6 +55,33 @@ public class AccountController {
 
         return ResponseEntity.status(
                 HttpStatus.CONFLICT
+        ).build();
+    }
+
+    @PostMapping(
+            path = "/verify",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    ) public ResponseEntity<Object> verify(
+            @RequestBody VerifyAccountRequest request
+    ) {
+        logger.info("POST: /verify called");
+        VerifyAccountUseCaseResponse responseModel = verifyAccountInput.verify(
+                VerifyAccountRequest.Mapper.mapToVerifyAccountUseCaseRequest(
+                        request
+                )
+        );
+
+        if (responseModel.getAccountCreationStatus().equals(AccountCreationStatus.VERIFIED)) {
+            return ResponseEntity.status(
+                    HttpStatus.CREATED
+            ).body(
+                    AccountCreationStatus.VERIFIED
+            );
+        }
+
+        return ResponseEntity.status(
+                HttpStatus.NOT_FOUND
         ).build();
     }
 }

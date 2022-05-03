@@ -68,6 +68,11 @@ public class UserDetailsEntity implements UserDetails {
         return this.isEnabled;
     }
 
+    public UserDetailsEntity enable() {
+        this.isEnabled = true;
+        return this;
+    }
+
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Factory {
         public static UserDetailsEntity newNormalUserInstance(

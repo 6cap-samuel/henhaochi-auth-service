@@ -16,6 +16,7 @@ import sam.henhaochi.authservice.usecases.models.out.responses.RegisterResponse;
 import sam.henhaochi.authservice.usecases.models.out.responses.UserDetailsDataSourceResponseModel;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -61,13 +62,30 @@ public class UserDetailsAdapter implements
         AccountCreationStatus accountCreationStatus =
                 this.userDetailsRepository.existsByUsernameOrEmail(
                         mappedRepositoryEntity.getUsername(),
-                        mappedRepositoryEntity.getEmail()
-                ) ? AccountCreationStatus.USERNAME_EXIST
+                        mappedRepositoryEntity.getEmail())
+                        ? AccountCreationStatus.USERNAME_EXIST
                         : this.createUser(mappedRepositoryEntity);
 
         return UserDetailsDataSourceResponseModel.Factory.newRegisterResponse(
                 accountCreationStatus
         );
+    }
+
+    @Override
+    public Optional<UserDetailsEntity> findByUsername(
+            final String username
+    ) {
+        return this.userDetailsRepository.findById(
+                username
+        );
+    }
+
+    @Override
+    public void enableAccount(String username) {
+        this.findByUsername(username)
+                .ifPresent(userDetailsEntity -> this.userDetailsRepository.save(
+                        userDetailsEntity.enable()
+                ));
     }
 
     private AccountCreationStatus createUser(

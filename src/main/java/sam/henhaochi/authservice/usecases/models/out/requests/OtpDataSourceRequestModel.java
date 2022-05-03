@@ -8,13 +8,20 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class OtpDataSourceRequestModel implements
-        GenerateOtpRequest {
+        GenerateOtpRequest,
+        VerifyOtpRequest {
 
     private final String username;
+    private final String otp;
 
     @Override
     public String getUsername() {
         return this.username;
+    }
+
+    @Override
+    public String getOtp() {
+        return this.otp;
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -26,5 +33,15 @@ public class OtpDataSourceRequestModel implements
                      .username(username)
                      .build();
          }
+
+        public static VerifyOtpRequest newVerifyOtpRequest(
+                final String username,
+                final String otp
+        ) {
+            return OtpDataSourceRequestModel.builder()
+                    .username(username)
+                    .otp(otp)
+                    .build();
+        }
     }
 }
