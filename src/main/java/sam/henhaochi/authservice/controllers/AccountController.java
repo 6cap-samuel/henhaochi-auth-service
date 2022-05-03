@@ -10,23 +10,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sam.henhaochi.authservice.annotations.methods.WithCorsProtection;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
-import sam.henhaochi.authservice.controllers.mappers.RegisterAccountRequestMapper;
 import sam.henhaochi.authservice.controllers.requests.RegisterAccountRequest;
-import sam.henhaochi.authservice.usecases.in.RegisterAccountInput;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
+import sam.henhaochi.authservice.controllers.requests.VerifyAccountRequest;
+import sam.henhaochi.authservice.usecases.interfaces.in.RegisterAccountInput;
+import sam.henhaochi.authservice.usecases.interfaces.in.VerifyAccountInput;
+import sam.henhaochi.authservice.usecases.models.in.responses.RegisterAccountUseCaseResponse;
+import sam.henhaochi.authservice.usecases.models.in.responses.VerifyAccountUseCaseResponse;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/accounts")
 public class AccountController {
 
-    final RegisterAccountInput registerAccountInput;
-    final RegisterAccountRequestMapper requestMapper;
+    private final RegisterAccountInput registerAccountInput;
+    private final VerifyAccountInput verifyAccountInput;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AccountController.class);
@@ -36,23 +34,54 @@ public class AccountController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @WithCorsProtection
     public ResponseEntity<Object> register(
             @RequestBody RegisterAccountRequest request
-    ) throws NoSuchAlgorithmException, URISyntaxException {
+    ) {
         logger.info("POST: /register called");
-        AccountCreationStatus status = registerAccountInput.with(
-                requestMapper.mapToAccountEntity(
+        RegisterAccountUseCaseResponse responseModel = registerAccountInput.create(
+                RegisterAccountRequest.Mapper
+                        .mapToRegisterUseCase(
+                                request
+                        )
+        );
+
+        if (responseModel.getAccountCreationStatus().equals(AccountCreationStatus.UNVERIFIED)) {
+            return ResponseEntity.status(
+                    HttpStatus.CREATED
+            ).body(
+                    AccountCreationStatus.UNVERIFIED
+            );
+        }
+
+        return ResponseEntity.status(
+                HttpStatus.CONFLICT
+        ).build();
+    }
+
+    @PostMapping(
+            path = "/verify",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    ) public ResponseEntity<Object> verify(
+            @RequestBody VerifyAccountRequest request
+    ) {
+        logger.info("POST: /verify called");
+        VerifyAccountUseCaseResponse responseModel = verifyAccountInput.verify(
+                VerifyAccountRequest.Mapper.mapToVerifyAccountUseCaseRequest(
                         request
                 )
         );
-        if (status.equals(AccountCreationStatus.SUCCESS)){
-            return ResponseEntity.created(
-                    new URI("https://henhaochi.io")
-            ).build();
+
+        if (responseModel.getAccountCreationStatus().equals(AccountCreationStatus.VERIFIED)) {
+            return ResponseEntity.status(
+                    HttpStatus.CREATED
+            ).body(
+                    AccountCreationStatus.VERIFIED
+            );
         }
+
         return ResponseEntity.status(
-                HttpStatus.CONFLICT
+                HttpStatus.NOT_FOUND
         ).build();
     }
 }
