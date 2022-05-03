@@ -24,6 +24,8 @@ public class OtpEntity {
 
     private OffsetDateTime expiryDate;
 
+    private int tries;
+
     public boolean isExpired() {
         return expiryDate.toEpochSecond() - ZonedDateTime.now().toEpochSecond() < 0;
     }
@@ -38,7 +40,8 @@ public class OtpEntity {
                     null,
                     code,
                     userDetails,
-                    Instant.now().atOffset(ZoneOffset.UTC).plusMinutes(1)
+                    Instant.now().atOffset(ZoneOffset.UTC).plusMinutes(1),
+                    0
             );
         }
     }

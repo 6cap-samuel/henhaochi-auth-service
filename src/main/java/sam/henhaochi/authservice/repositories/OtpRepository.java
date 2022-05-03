@@ -11,11 +11,6 @@ public interface OtpRepository extends JpaRepository<OtpEntity, Long> {
             String username
     );
 
-    boolean existsByCodeAndUserDetails_Username(
-            String code,
-            String username
-    );
-
     void deleteAllByUserDetails_Username(
             String username
     );
