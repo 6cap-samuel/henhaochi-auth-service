@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import sam.henhaochi.authservice.constants.LoginStatus;
 
+import javax.annotation.Nullable;
+
 @Data
 @AllArgsConstructor(staticName = "of")
 public class LoginAccountUseCaseResponse {
     private final LoginStatus loginStatus;
+
+    @Nullable
     private final String token;
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)

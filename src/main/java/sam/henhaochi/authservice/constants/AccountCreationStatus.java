@@ -5,6 +5,7 @@ public enum AccountCreationStatus {
     UNVERIFIED,
     VERIFIED,
     WRONG_OTP,
+    EXPIRED,
     COMPLETED,
     SUCCESS,
     FAIL,

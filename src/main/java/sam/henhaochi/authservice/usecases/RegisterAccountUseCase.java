@@ -53,14 +53,14 @@ public class RegisterAccountUseCase
                     )
             );
 
-             if (otpResponse.isOtpCreationStatusSuccess()) {
-                 smsDataSource.sendSms(
-                         SmsDataSourceRequestModel.Factory.newSendSmsRequest(
-                                 registerAccountModel.getPhoneNumber(),
-                                 String.format("Your OTP is: %s", otpResponse.getOtpNumber())
-                         )
-                 );
-             }
+//             if (otpResponse.isOtpCreationStatusSuccess()) {
+//                 smsDataSource.sendSms(
+//                         SmsDataSourceRequestModel.Factory.newSendSmsRequest(
+//                                 registerAccountModel.getPhoneNumber(),
+//                                 String.format("Your OTP is: %s", otpResponse.getOtpNumber())
+//                         )
+//                 );
+//             }
         }
 
         return RegisterAccountUseCaseResponse.Factory

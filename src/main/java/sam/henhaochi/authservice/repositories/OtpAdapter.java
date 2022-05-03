@@ -46,18 +46,33 @@ public class OtpAdapter implements
     @Override
     @Transactional
     public VerifyOtpResponse verifyOtp(VerifyOtpRequest verifyOtpRequest) {
-        return otpRepository.existsByCodeAndUserDetails_Username(
+        Optional<OtpEntity> otpEntity = this.otpRepository.findByCodeAndUserDetails_Username(
                 verifyOtpRequest.getOtp(),
-                verifyOtpRequest.getUsername())
-                ? this.enableAccount(verifyOtpRequest.getUsername())
+                verifyOtpRequest.getUsername()
+        );
+
+        return otpEntity.isPresent()
+                ? this.enableAccount(otpEntity.get())
                 : OtpDataSourceResponseModel.Factory.newVerifyOtpResponse(AccountCreationStatus.WRONG_OTP);
     }
 
     private VerifyOtpResponse enableAccount(
-            final String username
+            final OtpEntity otpEntity
     ) {
-        this.userDetailsDataSource.enableAccount(username);
-        this.deleteOtpByUsername(username);
+        this.deleteOtpByUsername(
+                otpEntity.getUserDetails().getUsername()
+        );
+
+        if (otpEntity.isExpired()) {
+            generateOtpResponseWhenAccountExist(
+                    otpEntity.getUserDetails()
+            );
+
+            return OtpDataSourceResponseModel.Factory
+                    .newVerifyOtpResponse(AccountCreationStatus.EXPIRED);
+        }
+
+        this.userDetailsDataSource.enableAccount(otpEntity.getUserDetails().getUsername());
         return OtpDataSourceResponseModel.Factory
                 .newVerifyOtpResponse(AccountCreationStatus.VERIFIED);
     }
