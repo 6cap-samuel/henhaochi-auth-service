@@ -32,7 +32,7 @@ public class LoginAccountUseCase
                 loginAccountUseCaseRequestModel.getUsername()
         );
 
-        if (userDetails.isEnabled()) {
+        if (!userDetails.isEnabled()) {
              return LoginAccountUseCaseResponse.Factory.unverified();
         }
 
@@ -42,7 +42,6 @@ public class LoginAccountUseCase
                         userDetails.getPassword()
                 )).isPasswordValid()
         ) {
-
             return LoginAccountUseCaseResponse.Factory.success(
                     jwtDataSource.generateJwt(
                             JwtDataSourceRequestModel.Factory

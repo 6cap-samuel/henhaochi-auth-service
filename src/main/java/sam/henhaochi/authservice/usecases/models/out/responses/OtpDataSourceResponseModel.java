@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
 import sam.henhaochi.authservice.constants.OtpCreationStatus;
 
-import javax.annotation.Nullable;
-
 @Data
 @Builder
 public class OtpDataSourceResponseModel implements
@@ -18,7 +16,6 @@ public class OtpDataSourceResponseModel implements
     private final OtpCreationStatus otpCreationStatus;
     private final AccountCreationStatus accountCreationStatus;
 
-    @Nullable
     private final String otpNumber;
 
     @Override

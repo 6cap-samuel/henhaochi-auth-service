@@ -3,9 +3,8 @@ package sam.henhaochi.authservice.usecases.models.in.responses;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.lang.Nullable;
 import sam.henhaochi.authservice.constants.LoginStatus;
-
-import javax.annotation.Nullable;
 
 @Data
 @AllArgsConstructor(staticName = "of")
