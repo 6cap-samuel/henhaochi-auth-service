@@ -6,15 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sam.henhaochi.authservice.constants.AccountCreationStatus;
 import sam.henhaochi.authservice.controllers.requests.RegisterAccountRequest;
 import sam.henhaochi.authservice.controllers.requests.VerifyAccountRequest;
+import sam.henhaochi.authservice.usecases.interfaces.in.GetUserDetailsInput;
 import sam.henhaochi.authservice.usecases.interfaces.in.RegisterAccountInput;
 import sam.henhaochi.authservice.usecases.interfaces.in.VerifyAccountInput;
+import sam.henhaochi.authservice.usecases.models.in.requests.GetUserDetailsUseCaseRequest;
+import sam.henhaochi.authservice.usecases.models.in.responses.GetUserDetailsUseCaseResponse;
 import sam.henhaochi.authservice.usecases.models.in.responses.RegisterAccountUseCaseResponse;
 import sam.henhaochi.authservice.usecases.models.in.responses.VerifyAccountUseCaseResponse;
 
@@ -25,6 +25,7 @@ public class AccountController {
 
     private final RegisterAccountInput registerAccountInput;
     private final VerifyAccountInput verifyAccountInput;
+    private final GetUserDetailsInput getUserDetailsInput;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AccountController.class);
@@ -83,5 +84,17 @@ public class AccountController {
         return ResponseEntity.status(
                 HttpStatus.NOT_FOUND
         ).build();
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<GetUserDetailsUseCaseResponse> getUserDetails(
+            @RequestParam final String username) {
+
+        GetUserDetailsUseCaseResponse getUserDetailsUseCaseResponse =
+                getUserDetailsInput.get(GetUserDetailsUseCaseRequest.Factory.newInstance(username));
+
+        return getUserDetailsUseCaseResponse.isAccountExist()
+                ? ResponseEntity.ok(getUserDetailsUseCaseResponse)
+                : ResponseEntity.notFound().build();
     }
 }

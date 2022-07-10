@@ -13,7 +13,7 @@ import sam.henhaochi.authservice.usecases.models.in.responses.LoginAccountUseCas
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/auth/v1")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final LoginAccountInput loginAccountInput;
